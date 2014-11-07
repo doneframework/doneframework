@@ -1,0 +1,53 @@
+<?php
+// module/Album/view/album/album/index.phtml:
+
+$title = 'My albums';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<p>
+    <a href="<?php echo $this->url('album', array('action'=>'add'));?>">Add new album</a>
+</p>
+
+<table class="table">
+<tr>
+    <?php
+    $donetable = $this->donetable;
+    echo $donetable->getHeaderFields($html = true, $actions = array('Edit', 'Delete'));
+    ?>
+</tr>
+<?php foreach ($this->paginator as $album) : // <-- change here! ?>
+<tr>
+    <?php
+        $getReadableIDFields = $donetable->getBodyFields($html = false, $actions = array('Edit', 'Delete'));
+        $actions = array('edit', 'delete');
+        foreach ($getReadableIDFields as $k => $v){
+            ?>
+                <td><?php echo $this->escapeHtml($album->$v);?></td>
+            <?php
+        }
+        if($actions){ //#If there are some actions to provide...
+            foreach ($actions as $a){
+                echo '<td><a href="'.$this->url('album',
+                    array('action'=>$a, 'id' => $album->id)).'">'.$a.'</a></td>';
+            }
+        }
+    ?>
+</tr>
+<?php endforeach; ?>
+</table>
+
+ <?php
+ // add at the end of the file after the table
+ echo $this->paginationControl(
+     // the paginator object
+     $this->paginator,
+     // the scrolling style
+     'sliding',
+     // the partial to use to render the control
+     array('partial/paginator.phtml', 'Album'),
+     // the route to link to when a user clicks a control link
+     array(
+         'route' => 'album'
+     )
+ );

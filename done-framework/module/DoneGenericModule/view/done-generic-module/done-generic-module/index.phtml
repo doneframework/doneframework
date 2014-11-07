@@ -1,0 +1,61 @@
+<?php
+
+$title = 'My zfcadmins';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<p>
+    <a href="<?php echo $this->url('zfcadmin/add', array('action'=>'add')); //#REPLACE-CHILD ?>">Add new zfcadmin</a>
+</p>
+
+<table class="table">
+<tr>
+    <?php
+    $donetable = $this->donetable;
+    echo $donetable->getHeaderFields($html = true, $actions = array('Edit', 'Delete'));
+    ?>
+</tr>
+<?php 
+
+
+foreach ($this->paginator as $zfcadmin) : ?>
+<tr>
+    <?php
+        $getReadableIDFields = $donetable->getBodyFields($html = false, $actions = array('Edit', 'Delete'));
+        $actions = array('edit', 'delete');
+        if(is_array($getReadableIDFields)){
+            
+            foreach ($getReadableIDFields as $k => $v){
+                ?>
+                    <td><?php  if(isset($zfcadmin->$v)){echo $this->escapeHtml($zfcadmin->$v);}?></td>
+                <?php
+            }
+            if($actions){ //#If there are some actions to provide...
+                foreach ($actions as $a){
+                    echo '<td><a href="'.$this->url('zfcadmin/edit',
+                        array('action'=>$a, 'id' => $zfcadmin->id)).'">'.$a.'</a></td>'; //#REPLACE-CHILD
+                }
+            }
+        }
+    ?>
+
+</tr>
+<?php endforeach; ?>
+</table>
+
+ <?php
+ // add at the end of the file after the table
+ echo $this->paginationControl(
+     // the paginator object
+     $this->paginator,
+     // the scrolling style
+     'sliding',
+     // the partial to use to render the control
+     array('partial/paginator.phtml', 'DoneGenericModule'),
+     // the route to link to when a user clicks a control link
+     array(
+         'route' => 'zfcadmin' //#REPLACE-ROUTE
+     )
+ );
+
+ 

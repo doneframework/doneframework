@@ -1,0 +1,12 @@
+<?php
+foreach ($this->container as $page) {
+  $active = $page->isActive(true);
+  if (count($page->getPages())) {
+    foreach ($page->getPages() as $subPage) {
+      $active = $subPage->isActive(true);
+      echo '<div class="item">';
+        echo '<a class="'. ($active ? 'active' : '') .'" href="' . $subPage->getHref() . '">' . $subPage->getLabel() . '</a>';
+      echo '</div>';      
+    }
+  }
+}

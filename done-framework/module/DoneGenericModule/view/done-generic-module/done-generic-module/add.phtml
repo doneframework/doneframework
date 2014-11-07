@@ -1,0 +1,26 @@
+<?php
+
+ $title = 'Add new zfcadmin';
+ $this->headTitle($title);
+ ?>
+
+    <?php
+    $doneform = $this->doneform;
+    
+    ?>
+ <h1><?php echo $this->escapeHtml($title); ?></h1>
+ 
+<?php
+ 
+ $form->setAttribute('action', $this->url( 'zfcadmin/add', array('action' => 'add')));//#REPLACE-CHILD
+ $form->prepare();
+
+ echo $this->form()->openTag($form);
+ echo $this->formHidden($form->get('id'));
+ $form_fields = $doneform->getNameFields($html = false, $actions = false);
+
+ foreach ($form_fields as $ff){
+    echo $this->formRow($form->get($ff));
+ }
+ echo $this->formSubmit($form->get('submit'));
+ echo $this->form()->closeTag();
